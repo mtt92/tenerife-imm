@@ -1,3 +1,4 @@
+
 import { createClient } from 'redis';
 
 let redisClient = null;
@@ -101,7 +102,7 @@ async function createProperty(req, res, redis) {
       terrace: parseInt(req.body.terrace) || 0,
       pool: req.body.pool || 'no',
       description: req.body.description.trim(),
-      images: ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800'],
+      images: req.body.images && req.body.images.length > 0 ? req.body.images : ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800'],
       featured: req.body.featured === true,
       active: true,
       createdAt: new Date().toISOString(),
