@@ -1,0 +1,23 @@
+[
+  {
+    "id": "prop_001",
+    "title": "Apartamento Vista Mar Los Cristianos",
+    "type": "apartamento", 
+    "operation": "venta",
+    "location": "los-cristianos",
+    "locationName": "Los Cristianos",
+    "price": 285000,
+    "rooms": 2,
+    "bathrooms": 2,
+    "size": 85,
+    "terrace": 15,
+    "pool": "comunitaria",
+    "description": "Precioso apartamento en primera línea con vistas panorámicas al océano. Completamente reformado con materiales de alta calidad.",
+    "images": ["https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800"],
+    "features": ["vista-mar", "aire-acondicionado", "wifi"],
+    "featured": true,
+    "active": true,
+    "createdAt": "2024-01-15T10:00:00Z",
+    "updatedAt": "2024-01-15T10:00:00Z"
+  }
+]
