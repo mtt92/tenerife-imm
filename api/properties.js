@@ -1,9 +1,16 @@
-import { Redis } from '@upstash/redis';
+import { createClient } from 'redis';
 
-// Configurazione Redis con le credenziali trovate
-const redis = new Redis({
-  url: 'redis://default:13PKu6EzWbxn7bbSYQt9uKqdM0D0gdIh@redis-14524.c14.us-east-1-2.ec2.redns.redis-cloud.com:14524'
-});
+let redisClient = null;
+
+async function getRedisClient() {
+  if (!redisClient) {
+    redisClient = createClient({
+      url: 'redis://default:13PKu6EzWbxn7bbSYQt9uKqdM0D0gdIh@redis-14524.c14.us-east-1-2.ec2.redns.redis-cloud.com:14524'
+    });
+    await redisClient.connect();
+  }
+  return redisClient;
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -15,13 +22,15 @@ export default async function handler(req, res) {
   }
 
   try {
+    const redis = await getRedisClient();
+    
     switch (req.method) {
       case 'GET':
-        return await getProperties(req, res);
+        return await getProperties(req, res, redis);
       case 'POST':
-        return await createProperty(req, res);
+        return await createProperty(req, res, redis);
       case 'DELETE':
-        return await deleteProperty(req, res);
+        return await deleteProperty(req, res, redis);
       default:
         return res.status(405).json({ error: 'Método no permitido' });
     }
@@ -34,9 +43,10 @@ export default async function handler(req, res) {
   }
 }
 
-async function getProperties(req, res) {
+async function getProperties(req, res, redis) {
   try {
-    const properties = await redis.get('properties') || [];
+    const propertiesJson = await redis.get('properties');
+    const properties = propertiesJson ? JSON.parse(propertiesJson) : [];
     
     const { type, operation, location, featured } = req.query;
     let filtered = properties;
@@ -61,7 +71,7 @@ async function getProperties(req, res) {
   }
 }
 
-async function createProperty(req, res) {
+async function createProperty(req, res, redis) {
   const adminToken = req.headers['x-admin-token'];
   if (!adminToken) {
     return res.status(401).json({ error: 'Token de administrador requerido' });
@@ -98,9 +108,11 @@ async function createProperty(req, res) {
       updatedAt: new Date().toISOString()
     };
 
-    const existingProperties = await redis.get('properties') || [];
+    const existingPropertiesJson = await redis.get('properties');
+    const existingProperties = existingPropertiesJson ? JSON.parse(existingPropertiesJson) : [];
     const updatedProperties = [property, ...existingProperties];
-    await redis.set('properties', updatedProperties);
+    
+    await redis.set('properties', JSON.stringify(updatedProperties));
 
     return res.status(201).json({
       success: true,
@@ -113,7 +125,7 @@ async function createProperty(req, res) {
   }
 }
 
-async function deleteProperty(req, res) {
+async function deleteProperty(req, res, redis) {
   const adminToken = req.headers['x-admin-token'];
   if (!adminToken) {
     return res.status(401).json({ error: 'Token de administrador requerido' });
@@ -125,9 +137,11 @@ async function deleteProperty(req, res) {
       return res.status(400).json({ error: 'ID de propiedad requerido' });
     }
 
-    const properties = await redis.get('properties') || [];
+    const propertiesJson = await redis.get('properties');
+    const properties = propertiesJson ? JSON.parse(propertiesJson) : [];
     const updatedProperties = properties.filter(p => p.id !== id);
-    await redis.set('properties', updatedProperties);
+    
+    await redis.set('properties', JSON.stringify(updatedProperties));
 
     return res.status(200).json({
       success: true,
