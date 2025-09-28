@@ -671,7 +671,7 @@
         // Variables globales
         let isLoggedIn = false;
         let properties = [];
-
+        let uploadedImages = [];
         // Inicialización
         document.addEventListener('DOMContentLoaded', function() {
             checkSession();
@@ -998,6 +998,7 @@ function displayImagePreviews() {
         function resetForm() {
             document.getElementById('property-form').reset();
             document.getElementById('image-preview').innerHTML = '';
+            uploadedImages = [];    
             delete document.getElementById('property-form').dataset.editingId;
         }
 
