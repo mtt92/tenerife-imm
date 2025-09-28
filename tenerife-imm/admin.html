@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Cristina Sacco</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-orange: #d97706;
+            --secondary-orange: #f59e0b;
+            --light-orange: #fef3c7;
+            --teal: #0d9488;
+            --light-teal: #ccfbf1;
+            --white: #ffffff;
+            --gray-light: #f8fafc;
+            --gray-medium: #64748b;
+            --gray-dark: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* LOGIN PAGE */
+        .login-container {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            animation: slideIn 0.5s ease;
+        }
+
+        .login-header {
+            margin-bottom: 2rem;
+        }
+
+        .login-logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-subtitle {
+            color: var(--gray-medium);
+            font-size: 0.9rem;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.1);
+        }
+
+        .login-button {
+            background: linear-gradient(135deg, var(--primary-orange) 0%, var(--secondary-orange) 100%);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(217, 119, 6, 0.4);
+        }
+
+        .login-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #fecaca;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .back-link {
+            margin-top: 2rem;
+            color: var(--gray-medium);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--primary-orange);
+        }
+
+        /* ADMIN DASHBOARD */
+        .admin-dashboard {
+            display: none;
+            min-height: 100vh;
+            background: var(--gray-light);
+        }
+
+        .admin-header {
+            background: var(--white);
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .admin-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-orange);
+        }
+
+        .admin-welcome {
+            color: var(--gray-medium);
+            font-size: 0.9rem;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-orange);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-orange);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--gray-light);
+            color: var(--gray-dark);
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        /* Resto del backoffice moderno che avevamo creato prima */
+        .admin-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-orange);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--gray-medium);
+            font-size: 0.9rem;
+        }
+
+        /* Admin Tabs */
+        .admin-tabs {
+            display: flex;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-medium);
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--light-orange);
+            color: var(--primary-orange);
+        }
+
+        .tab-btn i {
+            font-size: 1.5rem;
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--gray-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-label i {
+            color: var(--teal);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-orange);
+            background: rgba(217, 119, 6, 0.02);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--secondary-orange);
+            background: rgba(249, 115, 22, 0.05);
+            transform: scale(1.02);
+        }
+
+        .upload-content i {
+            font-size: 3rem;
+            color: var(--gray-medium);
+            margin-bottom: 1rem;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-container {
+                margin: 1rem;
+                padding: 2rem;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .admin-tabs {
+                flex-direction: column;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- LOGIN PAGE -->
+    <div class="login-container" id="login-page">
+        <div class="login-header">
+            <div class="login-logo">
+                <i class="fas fa-home"></i> Cristina Sacco
+            </div>
+            <div class="login-subtitle">Panel de Administración</div>
+        </div>
+        
+        <form class="login-form" id="login-form">
+            <div class="form-group">
+                <label class="form-label">Usuario</label>
+                <input type="text" class="form-input" id="username" value="cristina" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Contraseña</label>
+                <input type="password" class="form-input" id="password" placeholder="Introduce tu contraseña" required>
+            </div>
+            
+            <button type="submit" class="login-button" id="login-btn">
+                <i class="fas fa-sign-in-alt"></i>
+                Iniciar Sesión
+            </button>
+            
+            <div class="error-message" id="error-message">
+                Contraseña incorrecta. Inténtalo de nuevo.
+            </div>
+        </form>
+        
+        <a href="/" class="back-link">
+            <i class="fas fa-arrow-left"></i> Volver al sitio web
+        </a>
+    </div>
+
+    <!-- ADMIN DASHBOARD -->
+    <div class="admin-dashboard" id="admin-dashboard">
+        <header class="admin-header">
+            <div class="admin-brand">
+                <div class="admin-logo">
+                    <i class="fas fa-home"></i> Cristina Sacco
+                </div>
+                <div class="admin-welcome">Panel de Administración</div>
+            </div>
+            <div class="admin-actions">
+                <a href="/" class="btn btn-secondary" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Ver Sitio
+                </a>
+                <button class="btn btn-primary" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                </button>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-properties">0</div>
+                    <div class="stat-label">Propiedades Totales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="for-sale">0</div>
+                    <div class="stat-label">En Venta</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="for-rent">0</div>
+                    <div class="stat-label">En Alquiler</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="featured">0</div>
+                    <div class="stat-label">Destacadas</div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <nav class="admin-tabs">
+                <button class="tab-btn active" data-tab="properties">
+                    <i class="fas fa-list"></i>
+                    <span>Mis Propiedades</span>
+                </button>
+                <button class="tab-btn" data-tab="add-property">
+                    <i class="fas fa-plus"></i>
+                    <span>Agregar Propiedad</span>
+                </button>
+                <button class="tab-btn" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Configuración</span>
+                </button>
+            </nav>
+
+            <!-- Properties List Tab -->
+            <div class="tab-content active" id="tab-properties">
+                <h2 style="margin-bottom: 2rem; color: var(--gray-dark);">
+                    <i class="fas fa-list"></i> Gestionar Propiedades
+                </h2>
+                <div id="properties-list">
+                    <!-- Properties will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Add Property Tab -->
+            <div class="tab-content" id="tab-add-property">
+                <h2 style="margin-bottom: 2rem; color: var(--gray-dark);">
+                    <i class="fas fa-plus"></i> Agregar Nueva Propiedad
+                </h2>
+                
+                <form id="property-form">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-heading"></i> Título de la Propiedad
+                            </label>
+                            <input type="text" class="form-input" id="prop-title" required 
+                                   placeholder="ej. Apartamento con vistas al mar en Los Cristianos">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-building"></i> Tipo
+                            </label>
+                            <select class="form-select" id="prop-type" required>
+                                <option value="">Seleccionar tipo</option>
+                                <option value="apartamento">Apartamento</option>
+                                <option value="casa">Casa</option>
+                                <option value="villa">Villa</option>
+                                <option value="duplex">Dúplex</option>
+                                <option value="estudio">Estudio</option>
+                                <option value="local">Local Comercial</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-handshake"></i> Operación
+                            </label>
+                            <select class="form-select" id="prop-operation" required>
+                                <option value="">Seleccionar</option>
+                                <option value="venta">Venta</option>
+                                <option value="alquiler">Alquiler</option>
+                                <option value="alquiler-temporal">Alquiler Temporal</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-map-marker-alt"></i> Ubicación
+                            </label>
+                            <select class="form-select" id="prop-location" required>
+                                <option value="">Seleccionar zona</option>
+                                <option value="los-cristianos">Los Cristianos</option>
+                                <option value="playa-americas">Playa de las Américas</option>
+                                <option value="costa-adeje">Costa Adeje</option>
+                                <option value="arona">Arona</option>
+                                <option value="san-miguel">San Miguel de Abona</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-euro-sign"></i> Precio (€)
+                            </label>
+                            <input type="number" class="form-input" id="prop-price" required 
+                                   placeholder="ej. 250000">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-bed"></i> Habitaciones
+                            </label>
+                            <input type="number" class="form-input" id="prop-rooms" min="0" max="10" 
+                                   placeholder="ej. 2">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-bath"></i> Baños
+                            </label>
+                            <input type="number" class="form-input" id="prop-bathrooms" required min="1" max="10" 
+                                   placeholder="ej. 2">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <i class="fas fa-expand-arrows-alt"></i> Superficie (m²)
+                            </label>
+                            <input type="number" class="form-input" id="prop-size" required 
+                                   placeholder="ej. 85">
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-images"></i> Fotos de la Propiedad
+                            </label>
+                            <div class="upload-area" onclick="document.getElementById('image-upload').click()">
+                                <input type="file" id="image-upload" multiple accept="image/*" style="display: none;">
+                                <div class="upload-content">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <h4>Arrastra las fotos aquí o haz clic</h4>
+                                    <p>Formatos: JPG, PNG, WEBP - Máx 5MB por foto</p>
+                                </div>
+                            </div>
+                            <div id="image-preview" style="margin-top: 1rem;"></div>
+                        </div>
+                        
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                <i class="fas fa-align-left"></i> Descripción
+                            </label>
+                            <textarea class="form-textarea" id="prop-description" required
+                                      placeholder="Describe las características principales, ubicación, servicios cercanos..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                        <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                            <i class="fas fa-undo"></i> Limpiar Form
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Publicar Propiedad
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Settings Tab -->
+            <div class="tab-content" id="tab-settings">
+                <h2 style="margin-bottom: 2rem; color: var(--gray-dark);">
+                    <i class="fas fa-cog"></i> Configuración
+                </h2>
+                
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Cambiar Contraseña</label>
+                        <input type="password" class="form-input" placeholder="Nueva contraseña">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Confirmar Contraseña</label>
+                        <input type="password" class="form-input" placeholder="Confirmar contraseña">
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="margin-top: 1rem;">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let isLoggedIn = false;
+        let properties = [];
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            checkSession();
+            initializeEventListeners();
+        });
+
+        // Event Listeners
+        function initializeEventListeners() {
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            
+            // Tab navigation
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => switchTab(e.target.closest('.tab-btn').dataset.tab));
+            });
+            
+            // Property form
+            document.getElementById('property-form').addEventListener('submit', handleAddProperty);
+            
+            // Image upload
+            document.getElementById('image-upload').addEventListener('change', handleImageUpload);
+        }
+
+        // Login handling
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('password').value;
+            const loginBtn = document.getElementById('login-btn');
+            const errorMsg = document.getElementById('error-message');
+            
+            // Show loading
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verificando...';
+            
+            try {
+                const response = await fetch('/api/admin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Save session
+                    localStorage.setItem('admin-token', result.token);
+                    localStorage.setItem('admin-expires', Date.now() + result.expiresIn);
+                    
+                    // Show dashboard
+                    showDashboard();
+                    loadProperties();
+                } else {
+                    errorMsg.style.display = 'block';
+                    setTimeout(() => errorMsg.style.display = 'none', 3000);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMsg.textContent = 'Error de conexión. Inténtalo de nuevo.';
+                errorMsg.style.display = 'block';
+            }
+            
+            // Reset button
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Iniciar Sesión';
+        }
+
+        function checkSession() {
+            const token = localStorage.getItem('admin-token');
+            const expires = localStorage.getItem('admin-expires');
+            
+            if (token && expires && Date.now() < parseInt(expires)) {
+                showDashboard();
+                loadProperties();
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('login-page').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'block';
+            isLoggedIn = true;
+        }
+
+        function logout() {
+            localStorage.removeItem('admin-token');
+            localStorage.removeItem('admin-expires');
+            location.reload();
+        }
+
+        // Tab switching
+        function switchTab(tabId) {
+            // Remove active from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Activate selected tab
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        // Load properties
+        async function loadProperties() {
+            try {
+                const response = await fetch('/api/properties');
+                const result = await response.json();
+                
+                if (result.success) {
+                    properties = result.data;
+                    updateStats();
+                    displayProperties();
+                }
+            } catch (error) {
+                console.error('Error loading properties:', error);
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('total-properties').textContent = properties.length;
+            document.getElementById('for-sale').textContent = properties.filter(p => p.operation === 'venta').length;
+            document.getElementById('for-rent').textContent = properties.filter(p => p.operation === 'alquiler').length;
+            document.getElementById('featured').textContent = properties.filter(p => p.featured).length;
+        }
+
+        function displayProperties() {
+            const container = document.getElementById('properties-list');
+            
+            if (properties.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--gray-medium); padding: 2rem;">No hay propiedades agregadas aún.</p>';
+                return;
+            }
+            
+            container.innerHTML = properties.map(property => `
+                <div style="background: var(--white); border-radius: 8px; box-shadow: var(--shadow); padding: 1.5rem; margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: start;">
+                        <div style="flex: 1;">
+                            <h3 style="color: var(--gray-dark); margin-bottom: 0.5rem;">${property.title}</h3>
+                            <p style="color: var(--gray-medium); margin-bottom: 1rem;">${property.locationName} • ${property.operation} • € ${property.price.toLocaleString()}</p>
+                            <div style="display: flex; gap: 1rem; font-size: 0.9rem; color: var(--gray-medium);">
+                                <span><i class="fas fa-bed"></i> ${property.rooms} hab</span>
+                                <span><i class="fas fa-bath"></i> ${property.bathrooms} baños</span>
+                                <span><i class="fas fa-expand-arrows-alt"></i> ${property.size} m²</span>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary" onclick="editProperty('${property.id}')" style="padding: 0.5rem;">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn" style="background: #dc2626; color: white; padding: 0.5rem;" onclick="deleteProperty('${property.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Handle add property
+        async function handleAddProperty(e) {
+            e.preventDefault();
+            
+            const token = localStorage.getItem('admin-token');
+            if (!token) {
+                alert('Sesión expirada. Inicia sesión de nuevo.');
+                return;
+            }
+            
+            const formData = {
+                title: document.getElementById('prop-title').value,
+                type: document.getElementById('prop-type').value,
+                operation: document.getElementById('prop-operation').value,
+                location: document.getElementById('prop-location').value,
+                price: parseInt(document.getElementById('prop-price').value),
+                rooms: parseInt(document.getElementById('prop-rooms').value) || 0,
+                bathrooms: parseInt(document.getElementById('prop-bathrooms').value),
+                size: parseInt(document.getElementById('prop-size').value),
+                description: document.getElementById('prop-description').value,
+                images: [], // Por ahora URLs placeholder, después implementaremos upload real
+                featured: false
+            };
+            
+            try {
+                const response = await fetch('/api/properties', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Admin-Token': token
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('¡Propiedad agregada exitosamente!');
+                    document.getElementById('property-form').reset();
+                    loadProperties();
+                    switchTab('properties');
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error de conexión. Inténtalo de nuevo.');
+            }
+        }
+
+        // Image upload handling
+        function handleImageUpload(e) {
+            const files = Array.from(e.target.files);
+            const preview = document.getElementById('image-preview');
+            
+            preview.innerHTML = '';
+            
+            files.forEach((file, index) => {
+                if (file.size > 5 * 1024 * 1024) {
+                    alert(`${file.name} es demasiado grande. Máximo 5MB por imagen.`);
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin: 0.5rem; border: 2px solid #e2e8f0;';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Property management functions
+        function editProperty(id) {
+            const property = properties.find(p => p.id === id);
+            if (!property) return;
+            
+            // Populate form with existing data
+            document.getElementById('prop-title').value = property.title;
+            document.getElementById('prop-type').value = property.type;
+            document.getElementById('prop-operation').value = property.operation;
+            document.getElementById('prop-location').value = property.location;
+            document.getElementById('prop-price').value = property.price;
+            document.getElementById('prop-rooms').value = property.rooms;
+            document.getElementById('prop-bathrooms').value = property.bathrooms;
+            document.getElementById('prop-size').value = property.size;
+            document.getElementById('prop-description').value = property.description;
+            
+            // Switch to add property tab for editing
+            switchTab('add-property');
+            
+            // Store editing ID for update instead of create
+            document.getElementById('property-form').dataset.editingId = id;
+        }
+
+        async function deleteProperty(id) {
+            if (!confirm('¿Estás segura de que quieres eliminar esta propiedad?')) return;
+            
+            const token = localStorage.getItem('admin-token');
+            try {
+                const response = await fetch(`/api/properties?id=${id}`, {
+                    method: 'DELETE',
+                    headers: { 'X-Admin-Token': token }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('Propiedad eliminada correctamente');
+                    loadProperties();
+                } else {
+                    alert('Error al eliminar: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error de conexión');
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('property-form').reset();
+            document.getElementById('image-preview').innerHTML = '';
+            delete document.getElementById('property-form').dataset.editingId;
+        }
+
+        // Drag and drop for images
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.querySelector('.upload-area');
+            
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = Array.from(e.dataTransfer.files).filter(file => file.type.startsWith('image/'));
+                if (files.length > 0) {
+                    document.getElementById('image-upload').files = e.dataTransfer.files;
+                    handleImageUpload({ target: { files } });
+                }
+            });
+        });
+
+        // Auto-save draft functionality
+        function saveDraft() {
+            const formData = new FormData(document.getElementById('property-form'));
+            const draft = {};
+            for (let [key, value] of formData.entries()) {
+                draft[key] = value;
+            }
+            localStorage.setItem('property-draft', JSON.stringify(draft));
+            alert('Borrador guardado');
+        }
+
+        function loadDraft() {
+            const draft = localStorage.getItem('property-draft');
+            if (draft && confirm('¿Cargar el último borrador guardado?')) {
+                const data = JSON.parse(draft);
+                Object.keys(data).forEach(key => {
+                    const element = document.getElementById(`prop-${key}`);
+                    if (element) element.value = data[key];
+                });
+            }
+        }
+
+        // Initialize draft functionality
+        window.addEventListener('load', function() {
+            const form = document.getElementById('property-form');
+            
+            // Add draft buttons
+            const draftButtons = document.createElement('div');
+            draftButtons.style.cssText = 'display: flex; gap: 1rem; justify-content: center; margin: 1rem 0;';
+            draftButtons.innerHTML = `
+                <button type="button" class="btn btn-secondary" onclick="saveDraft()">
+                    <i class="fas fa-save"></i> Guardar Borrador
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="loadDraft()">
+                    <i class="fas fa-upload"></i> Cargar Borrador
+                </button>
+            `;
+            
+            form.insertBefore(draftButtons, form.lastElementChild);
+            
+            // Auto-save every 2 minutes
+            setInterval(saveDraft, 120000);
+        });
+    </script>
+</body>
+</html>
