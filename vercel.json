@@ -1,13 +1,8 @@
 {
-  "version": 2,
   "functions": {
-    "api/admin.js": { "maxDuration": 10 },
-    "api/properties.js": { "maxDuration": 30 }
+    "api/*.js": {}
   },
   "rewrites": [
     { "source": "/admin", "destination": "/admin.html" }
-  ],
-  "buildCommand": "",
-  "outputDirectory": ".",
-  "installCommand": "npm install"
+  ]
 }
