@@ -1,0 +1,26 @@
+{
+  "name": "cristinasaccoweb",
+  "version": "1.0.0",
+  "description": "Cristina Sacco Real Estate Website with Modern Admin Panel",
+  "main": "index.html",
+  "dependencies": {
+    "@upstash/redis": "^1.25.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "scripts": {
+    "build": "echo 'Build completed successfully'"
+  },
+  "keywords": [
+    "real-estate",
+    "tenerife",
+    "properties",
+    "cristina-sacco",
+    "immobiliare"
+  ],
+  "author": "Cristina Sacco",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
