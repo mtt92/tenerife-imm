@@ -1,9 +1,8 @@
 import { Redis } from '@upstash/redis';
 
-// Inizializza Redis con le variabili d'ambiente di Vercel
+// Configurazione Redis con le credenziali trovate
 const redis = new Redis({
-  url: process.env.STORAGE_REST_API_URL,
-  token: process.env.STORAGE_REST_API_TOKEN,
+  url: 'redis://default:13PKu6EzWbxn7bbSYQt9uKqdM0D0gdIh@redis-14524.c14.us-east-1-2.ec2.redns.redis-cloud.com:14524'
 });
 
 export default async function handler(req, res) {
@@ -30,7 +29,7 @@ export default async function handler(req, res) {
     console.error('API Error:', error);
     return res.status(500).json({ 
       error: 'Error interno del servidor',
-      message: process.env.NODE_ENV === 'development' ? error.message : undefined
+      message: error.message 
     });
   }
 }
@@ -39,7 +38,6 @@ async function getProperties(req, res) {
   try {
     const properties = await redis.get('properties') || [];
     
-    // Applicare filtri se presenti
     const { type, operation, location, featured } = req.query;
     let filtered = properties;
 
@@ -48,7 +46,6 @@ async function getProperties(req, res) {
     if (location) filtered = filtered.filter(p => p.location === location);
     if (featured === 'true') filtered = filtered.filter(p => p.featured === true);
 
-    // Ordinare per data di creazione
     filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     return res.status(200).json({
@@ -60,7 +57,7 @@ async function getProperties(req, res) {
     });
   } catch (error) {
     console.error('Error getting properties:', error);
-    return res.status(500).json({ error: 'Error al cargar propiedades' });
+    return res.status(500).json({ error: 'Error al cargar propiedades: ' + error.message });
   }
 }
 
@@ -94,20 +91,15 @@ async function createProperty(req, res) {
       terrace: parseInt(req.body.terrace) || 0,
       pool: req.body.pool || 'no',
       description: req.body.description.trim(),
-      images: Array.isArray(req.body.images) ? req.body.images : ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800'],
+      images: ['https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800'],
       featured: req.body.featured === true,
       active: true,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString()
     };
 
-    // Ottieni proprietà esistenti
     const existingProperties = await redis.get('properties') || [];
-    
-    // Aggiungi nuova proprietà all'inizio dell'array
     const updatedProperties = [property, ...existingProperties];
-    
-    // Salva nel database Redis
     await redis.set('properties', updatedProperties);
 
     return res.status(201).json({
@@ -117,7 +109,7 @@ async function createProperty(req, res) {
     });
   } catch (error) {
     console.error('Error creating property:', error);
-    return res.status(500).json({ error: 'Error al crear propiedad' });
+    return res.status(500).json({ error: 'Error al crear propiedad: ' + error.message });
   }
 }
 
@@ -134,12 +126,6 @@ async function deleteProperty(req, res) {
     }
 
     const properties = await redis.get('properties') || [];
-    const propertyIndex = properties.findIndex(p => p.id === id);
-    
-    if (propertyIndex === -1) {
-      return res.status(404).json({ error: 'Propiedad no encontrada' });
-    }
-
     const updatedProperties = properties.filter(p => p.id !== id);
     await redis.set('properties', updatedProperties);
 
@@ -149,7 +135,7 @@ async function deleteProperty(req, res) {
     });
   } catch (error) {
     console.error('Error deleting property:', error);
-    return res.status(500).json({ error: 'Error al eliminar propiedad' });
+    return res.status(500).json({ error: 'Error al eliminar propiedad: ' + error.message });
   }
 }
 
